@@ -9,8 +9,15 @@ use BenSampo\Enum\Enum;
  * @method static static OptionTwo()
  * @method static static OptionThree()
  */
-final class UserRole extends Enum
+final class LoanState extends Enum
 {
-    const Admin = 'admin';
-    const User = 'user';
+    const PENDING = 'pending';
+
+    const CANCEL = 'cancel';
+
+    const APPROVED = 'approved';
+
+    const PAID = 'paid';
+
+    const REJECTED = 'rejected';
 }

@@ -11,8 +11,13 @@ class LoanPolicy
     /**
      * Create a new policy instance.
      */
-    public function __construct()
+    public function view()
     {
-        //
+        return $user->role === UserRole::Admin || $user->id === $loan->user_id;
+    }
+
+    public function approve()
+    {
+        return $user->role === UserRole::Admin;
     }
 }

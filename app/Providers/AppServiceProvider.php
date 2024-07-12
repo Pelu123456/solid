@@ -2,13 +2,20 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use App\Repositories\LoanRepositoryContract;
 use App\Repositories\LoanRepository;
+use App\Models\User;
+use App\Observers\UserObserver;
 
 
 class AppServiceProvider extends ServiceProvider
 {
+
+    protected $policies = [
+        Loan::class => LoanPolicy::class,
+    ];
+
     /**
      * Register any application services.
      */
@@ -23,6 +30,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        User::observe(UserObserver::class);
+        $this->registerPolicies();
     }
 }

@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\LoanRequest;
+use App\Enums\UserRole;
 use App\Services\Interface\LoanServiceInterface;
 
 class LoanController extends Controllers
 {
     protected $loanService;
 
-    public function __contruct(LoanServiceInterface $loanService)
+    public function __construct(LoanServiceInterface $loanService)
     {
         $this->loanService = $loanService;
     }
@@ -19,16 +20,19 @@ class LoanController extends Controllers
      */
     public function index()
     {
-        //
+        try{
+            if (auth()->user()->role() === UserRole::User) {
+                $loans = $this->loanService->getUserLoan(auth()->user()->id);
+                return response()->json($loans, 200);
+            } else {
+                $loans = $this->loanService->getAllLoan();
+                return response()->json($loans, 200);
+            }   
+        } catch (\Exception $e){
+            return response()->json('Can not found loans', 500);
+        }  
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //    
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -39,14 +43,13 @@ class LoanController extends Controllers
         if ($loan) {
             return response()->json($loan, 201);
         }
-
         return response()->json(['message' => 'Failed to create loan.'], 500);
     }
 
     /**
      * Display the specified resource.
      */
-    
+
     public function show(string $id)
     {
         $loan = $this->loanService->find($id);
@@ -69,7 +72,7 @@ class LoanController extends Controllers
      */
     public function approve(Request $request, string $id)
     {
-        //
+    //    
     }
 
     /**
